@@ -53,7 +53,7 @@
 <details>
 <summary>2. Use of Platforms in Cloud Computing</summary>
 
-- Concepts of Abstraction and Virtualization
+- [X] Concepts of Abstraction and Virtualization
 - Virtualization technologies
   - Types of virtualization (access, application, CPU, storage)
   - Mobility patterns (P2V, V2V, V2P, P2P, D2C, C2C, C2D, D2D)
@@ -190,6 +190,7 @@
      - Compliance as a Service (CaaS)
 
 2. [Use of Platforms in Cloud Computing](lessons/platforms/readme.md)
+
    - Concepts of Abstraction and Virtualization
    - Virtualization technologies
      - Types of virtualization (access, application, CPU, storage)

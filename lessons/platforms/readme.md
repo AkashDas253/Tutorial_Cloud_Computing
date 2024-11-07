@@ -1,12 +1,93 @@
+# Chapter 2 
 
-## Chapter 2
+## Use of Platforms in Cloud Computing
 
-### Use of Platforms in Cloud Computing
-
-#### Concepts of Abstraction and Virtualization
+### Concepts of Abstraction and Virtualization
 - **Abstraction**: In cloud computing, abstraction refers to hiding the complexities of the underlying infrastructure from users, allowing them to interact with simplified models. This enables users to focus on application development without worrying about hardware configurations and other lower-level operations.
 
 - **Virtualization**: Virtualization is a technology that allows multiple virtual instances of hardware and software to run on a single physical machine. It optimizes resource usage and improves flexibility, enabling the efficient allocation of resources in cloud environments.
+
+#### Virtualisation
+
+It is the set of activities aimed at creating a virtual version of real components, including computer hardware platforms, operating systems, storage, and networking.
+
+- Virtualization is NOT the same as emulation & simulation.
+- Virtualization is the simulation of the software and/or hardware upon which other software runs.
+- This simulated environment is called a virtual machine (VM).
+
+#### Challenges:
+- OS and Apps in a VM don’t know that the VMM exists or that they share CPU resources with other VMs.
+- VMM should isolate Guest SW stacks from one another.
+- VMM should run protected from all Guest software.
+- VMM should present a virtual platform interface to Guest SW.
+
+#### Levels of virtualization
+- Application Virtualization provides a virtual implementation of the application programming interface (API) that a running application expects to use, allowing applications developed for one platform to run on another without modifying the application itself.
+- Operating System virtualization provides a virtual implementation of the OS interface that can be used to run applications written for the same OS as the host, with each application in a separate VM container.
+
+#### Full Virtualization
+- One or more OSs and the applications they contain are run on top of virtual hardware.
+- Each OS and application instance runs in a separate VM called a guest operating system.
+- Guest OSs on a host are managed by the hypervisor/virtual machine monitor (VMM).
+- Hypervisor controls the flow of instructions between the guest OSs and the physical hardware.
+- Some hypervisors run on top of another OS or the host operating system.
+
+#### Paravirtualization
+- It is a method for the hypervisor to offer interfaces to the guest OS that the guest OS can use instead of the normal hardware interfaces.
+- Paravirtualization is a type of virtualization where software instructions from the guest operating system running inside a virtual machine can use "hypercalls" that communicate directly with the hypervisor.
+- Using paravirtualized interfaces, a guest OS can provide faster access for resources such as hard drives and networks.
+
+#### Hardware-assisted Virtualization
+- The guest OS runs at ring 0.
+- Provides address bus isolation.
+- The VMM uses processor extensions (such as Intel®-VT or AMD-V) to intercept and emulate privileged operations in the guest.
+- Hardware-assisted virtualization removes many of the problems that make writing a VMM challenging.
+- The VMM runs in a more privileged ring than 0, a virtual -1 ring is created.
+- **Pros**: It allows running unmodified OSs (so legacy OS can be run without problems).
+- **Cons**: Speed and Flexibility - An unmodified OS does not know it is running in a virtualized environment and so, it can’t take advantage of any of the virtualization features.
+- It can be resolved using para-virtualization partially.
+
+### Types of Virtualization
+
+#### 1. Full Virtualization
+- **Description**: One or more OSs and the applications they contain are run on top of virtual hardware.
+- **Guest OS Modification**: Not needed.
+- **Critical Instructions**: Emulated by software through binary translation.
+- **Performance**: Slower due to binary translation.
+- **Example**: VMware (using binary translation).
+- **Pros**: No need to modify OS; allows running unmodified OSs (legacy OS can be run without problems).
+- **Cons**: Speed and flexibility; an unmodified OS does not know it is running in a virtualized environment and so, it can’t take advantage of any of the virtualization features.
+
+#### 2. Hardware-Assisted Virtualization
+- **Description**: Uses processor extensions (such as Intel®-VT or AMD-V) to intercept and emulate privileged operations in the guest.
+- **Guest OS Modification**: Not needed.
+- **Critical Instructions**: Handled by hardware extensions.
+- **Performance**: Better than full virtualization due to hardware support.
+- **Example**: Modern implementations of VMware, Hyper-V.
+- **Pros**: Allows running unmodified OSs; removes many of the problems that make writing a VMM challenging.
+- **Cons**: Speed and flexibility; an unmodified OS does not know it is running in a virtualized environment and so, it can’t take advantage of any of the virtualization features.
+
+#### 3. Paravirtualization
+- **Description**: The hypervisor offers interfaces to the guest OS that the guest OS can use instead of the normal hardware interfaces.
+- **Guest OS Modification**: Needed.
+- **Critical Instructions**: Replaced by hypercalls.
+- **Performance**: Faster due to direct communication.
+- **Example**: Xen, Denali, VMware ESX.
+- **Pros**: Reduces overhead; provides faster access for resources such as hard drives and networks.
+- **Cons**: High cost of maintaining a para-virtualized OS; requires modification of the guest OS.
+
+#### Comparison: Full Virtualization vs Hardware-Assisted Virtualization  vs Paravirtualization 
+
+| Feature                  | Full Virtualization       | Hardware-Assisted Virtualization | Paravirtualization        |
+|--------------------------|---------------------------|----------------------------------|---------------------------|
+| Guest OS Modification    | Not needed                | Not needed                       | Needed                    |
+| Critical Instructions    | Emulated by software      | Handled by hardware extensions   | Replaced by hypercalls    |
+| Performance              | Slower due to emulation   | Better due to hardware support   | Faster due to direct communication |
+| Example                  | VMware (binary translation) | Modern VMware, Hyper-V           | Xen, Denali, VMware ESX   |
+| Pros                     | No need to modify OS      | Allows running unmodified OSs    | Reduces overhead          |
+| Cons                     | Speed and flexibility     | Speed and flexibility            | High cost of maintaining a para-virtualized OS |
+
+
 
 #### Virtualization Technologies
 Virtualization technologies are foundational to cloud computing, providing the ability to create and manage virtual environments.
@@ -20,7 +101,7 @@ Virtualization technologies are foundational to cloud computing, providing the a
   
   - **Storage Virtualization**: Combines multiple storage devices into a single logical unit, simplifying storage management and improving efficiency.
 
-#### Mobility Patterns
+#### Resource Mobility Patterns
 Mobility patterns refer to the methods of migrating virtual machines and applications across environments. Key patterns include:
 
 - **P2V (Physical to Virtual)**: Converting a physical machine into a virtual machine.
@@ -51,6 +132,49 @@ Mobility patterns refer to the methods of migrating virtual machines and applica
   - **Application Delivery Network (ADN)**: A system that provides application-aware load balancing, improving application performance and user experience.
 
 - **Example of Load Balancing in Google Cloud**: Google Cloud provides load balancing services that automatically distribute incoming traffic across multiple instances of applications, ensuring optimal performance and reliability.
+
+#### Scheduling Algorithms
+
+##### 1. Round Robin
+- **Description**: Distributes client requests to available servers in a circular order.
+- **Pros**: Simple to implement; ensures even distribution of requests.
+- **Cons**: Does not consider server load or response time.
+
+##### 2. Weighted Round Robin
+- **Description**: Similar to Round Robin but assigns a weight to each server. Servers with higher weights receive more requests.
+- **Pros**: Allows differentiation between servers with different capacities.
+- **Cons**: Still does not consider real-time server load or response time.
+
+##### 3. Least Response Time
+- **Description**: Directs requests to the server with the lowest average response time.
+- **Pros**: Optimizes for faster response times.
+- **Cons**: Requires continuous monitoring of server response times.
+
+##### 4. Least Connections
+- **Description**: Sends requests to the server with the fewest active connections.
+- **Pros**: Balances load based on the number of active connections.
+- **Cons**: May not account for the actual load or processing power of the servers.
+
+##### 5. Weighted Least Connections
+- **Description**: Combines the Least Connections method with server weights. Servers with higher weights receive more connections.
+- **Pros**: Balances load while considering server capacity.
+- **Cons**: Requires accurate weight assignment and monitoring of active connections.
+
+##### 6. Other Customizations Based on Certain Parameters
+- **Description**: Custom algorithms that distribute requests based on specific parameters such as server health, geographic location, or application-specific metrics.
+- **Pros**: Highly flexible and can be tailored to specific needs.
+- **Cons**: Complexity in implementation and maintenance.
+
+##### Comparison Table
+
+| Algorithm                      | Description                                           | Pros                                      | Cons                                      |
+|--------------------------------|-------------------------------------------------------|-------------------------------------------|-------------------------------------------|
+| Round Robin                    | Distributes requests in a circular order              | Simple; ensures even distribution         | Ignores server load and response time     |
+| Weighted Round Robin           | Distributes requests based on server weights          | Differentiates server capacities          | Ignores real-time load and response time  |
+| Least Response Time            | Directs to server with lowest average response time   | Optimizes for faster response times       | Requires continuous monitoring            |
+| Least Connections              | Sends to server with fewest active connections        | Balances based on active connections      | May not reflect actual server load        |
+| Weighted Least Connections     | Combines Least Connections with server weights        | Considers server capacity and connections | Requires accurate weights and monitoring  |
+| Customizations                 | Based on specific parameters                          | Highly flexible and tailored              | Complex implementation and maintenance    |
 
 #### Hypervisors
 
