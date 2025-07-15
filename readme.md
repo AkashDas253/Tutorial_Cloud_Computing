@@ -2,7 +2,7 @@
 
 - [Concepts](lessons/concepts/readme.md)
 
-### Sources and Syllabus
+### Sources 
 - [Makaut Cloud Computing (PEC-CS701B)](sources/makaut_pec_cs701B/readme.md)
 
 ### [Cloud Fundamentals](lessons/cloud_fundamentals/readme.md)
